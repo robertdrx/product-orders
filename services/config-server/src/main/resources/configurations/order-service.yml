@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://ms_pg_sql:5432/order
+    username: alibou
+    password: alibou
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    producer:
+      bootstrap-servers: kafka:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: orderConfirmation:com.alibou.ecommerce.kafka.OrderConfirmation
+server:
+  port: 8070
+
+eureka:
+  instance:
+    appname: order-service  # ✅ Must match `spring.application.name`
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+application:
+  config:
+    customer-url: http://gateway:8222/api/v1/customers
+    payment-url: http://gateway:8222/api/v1/payments
+    product-url: http://gateway:8222/api/v1/products

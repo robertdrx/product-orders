@@ -1,0 +1,334 @@
+services:
+  postgres:
+    container_name: ms_pg_sql
+    image: postgres
+    healthcheck:
+      test: pg_isready
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      POSTGRES_USER: alibou
+      POSTGRES_PASSWORD: alibou
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: ms_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  mongodb:
+    container_name: ms_mongo_db
+    image: mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: alibou
+      MONGO_INITDB_ROOT_PASSWORD: alibou
+    networks:
+      - microservices-net
+
+  mongo-express:
+    container_name: ms_mongo_express
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=alibou
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=alibou
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - microservices-net
+
+  kafka:
+    image: docker.io/bitnami/kafka:3.9
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    networks:
+      - microservices-net
+
+  mail-dev:
+    container_name: ms_mail_dev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+      - microservices-net
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - microservices-net
+
+  keycloak:
+    container_name: keycloak-ms
+    image: quay.io/keycloak/keycloak:24.0.2
+    ports:
+      - 8080:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    networks:
+      - microservices-net
+    command:
+      - "start-dev"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+  config-server:
+    image: "robert111/config-server:s4"
+    container_name: config-server-ms
+    ports:
+      - 8888:8888
+    healthcheck:
+      test: "curl --fail --silent localhost:8888/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  discovery:
+    image: "robert111/discovery:s1"
+    container_name: discovery
+    depends_on:
+      config-server:
+        condition: service_healthy
+    ports:
+      - 8761:8761
+    healthcheck:
+      test: "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  gateway:
+    image: "robert111/gateway:s1"
+    container_name: gateway
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      customer:
+        condition: service_healthy
+      product:
+        condition: service_healthy
+      payment:
+        condition: service_healthy
+      order:
+        condition: service_healthy
+    environment:
+      - management.endpoints.web.exposure.include=*
+    ports:
+      - 8222:8222
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  customer:
+    image: "robert111/customer:s2"
+    container_name: customer-service
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://alibou:alibou@ms_mongo_db:27017/customer?authSource=admin
+    ports:
+      - 8090:8090
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  product:
+    image: "robert111/product:s1"
+    container_name: product-service
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8050/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    ports:
+      - 8050:8050
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  payment:
+    image: "robert111/payment:s1"
+    container_name: payment-service
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8060/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
+    ports:
+      - 8060:8060
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  order:
+    image: "robert111/order:s1"
+    container_name: order-service
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
+    ports:
+      - 8070:8070
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+  notification:
+    image: "robert111/notification:s1"
+    container_name: notification-service
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8040/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
+    ports:
+      - 8040:8040
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - microservices-net
+
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgresql:
+  pgadmin:
+  mongo:
+  keycloak_data:
+    driver: local
+  kafka_data:
+    driver: local

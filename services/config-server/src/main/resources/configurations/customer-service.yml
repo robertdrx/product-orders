@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      username: alibou
+      password: alibou
+      host: ms_mongo_db
+      port: 27017
+      database: customer
+      authentication-database: admin
+
+eureka:
+  instance:
+    appname: customer-service  # ✅ Must match `spring.application.name`
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+server:
+  port: 8090

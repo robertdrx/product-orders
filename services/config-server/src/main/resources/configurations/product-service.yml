@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://ms_pg_sql:5432/product
+    username: alibou
+    password: alibou
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    flyway:
+      baseline-on-migrate: true
+      enabled: true
+      baseline-description: "init"
+      baseline-version: 0
+      user: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+
+eureka:
+  instance:
+    appname: product-service  # ✅ Must match `spring.application.name`
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+server:
+  port: 8050
