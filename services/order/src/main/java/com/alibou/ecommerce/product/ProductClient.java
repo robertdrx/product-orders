@@ -24,7 +24,7 @@ public class ProductClient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        headers.set(HttpHeaders.AUTHORIZATION, token);
+        //headers.set(HttpHeaders.AUTHORIZATION, token);
 
         HttpEntity<List<PurchaseRequest>> requestEntity = new HttpEntity<>(requestBody, headers);
         ParameterizedTypeReference<List<PurchaseResponse>> responseType =

@@ -38,7 +38,7 @@ public class OrderService {
         System.out.println("###token: " + token);
 
         //check the customer --> OpenFeign
-        var customer = this.customerClient.findCustomerById(token, request.customerId())
+        var customer = this.customerClient.findCustomerById(request.customerId())
                 .orElseThrow(() -> new BusinessException("Cannot create order:: No customer exists with the provided ID::" + request.customerId()));
 
         //purchase the products -> product-ms (RestTemplate)
@@ -67,7 +67,7 @@ public class OrderService {
                 order.getReference(),
                 customer
         );
-        paymentClient.requestOrderPayment(token, paymentRequest);
+        paymentClient.requestOrderPayment(paymentRequest);
 
         //send the order confirmation --> notification-ms (kafka)
         orderProducer.sendOrderConfirmation(

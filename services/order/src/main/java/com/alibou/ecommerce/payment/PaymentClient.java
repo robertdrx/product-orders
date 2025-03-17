@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface PaymentClient {
 
     @PostMapping
-    Integer requestOrderPayment(@RequestHeader("Authorization") String token, @RequestBody PaymentRequest request);
+    Integer requestOrderPayment(@RequestBody PaymentRequest request);
 
 }
