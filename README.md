@@ -1,4 +1,4 @@
-## Spring Boot microservices application to create customers and send product order details via email.
+## Spring Boot microservices application, using mono repo approach, to create customers and send product order details via email.
 Used:
 - Spring Boot
 - Kafka
