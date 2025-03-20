@@ -32,7 +32,7 @@ Ex.: docker build . -t <docker_username>/customer:s1
 Run:
 docker compose up -d
 
-## Kubernnetes instalation:
+## Kubernetes instalation:
 
 Install keycloak - navigate to "\k8s\helm\product-orders-services".
 Run: 
