@@ -1,0 +1,27 @@
+{{- define "common.service" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.serviceName }}
+spec:
+  selector:
+    app: {{ .Values.appLabel }}
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+    {{- if .Values.mail_dev_enabled }}
+    - name: web-ui
+      protocol: TCP
+      port: 1080
+      targetPort: 1080
+    {{- end }}
+    {{- if .Values.kafka_config }}
+    - name: http2
+      protocol: TCP
+      port: 9093
+      targetPort: 9093
+    {{- end }}
+  {{- end -}}

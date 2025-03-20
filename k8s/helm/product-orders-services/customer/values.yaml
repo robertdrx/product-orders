@@ -1,0 +1,29 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: customer-deployment
+serviceName: customer-service
+appLabel: customer-service
+appName: customer-service
+
+replicaCount: 1
+
+image:
+  repository: robert111/customer
+  tag: s2
+
+containerPort: 8090
+
+service:
+  type: ClusterIP
+  port: 8090
+  targetPort: 8090
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false

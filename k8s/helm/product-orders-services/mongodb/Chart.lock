@@ -1,0 +1,6 @@
+dependencies:
+- name: product-orders-common
+  repository: file://../../product-orders-common
+  version: 0.1.0
+digest: sha256:a83d72554865bc177f9fb05d1509b7f52357fe62ca2673c60008ffdcea068fc3
+generated: "2025-03-18T14:09:52.7492208+02:00"

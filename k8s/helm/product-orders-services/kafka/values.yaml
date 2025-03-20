@@ -1,0 +1,30 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: kafka-deployment
+serviceName: kafka
+appLabel: kafka-service
+appName: kafka-service
+
+replicaCount: 1
+
+image:
+  repository: docker.io/bitnami/kafka
+  tag: 3.9
+
+containerPort: 9092
+
+service:
+  type: ClusterIP
+  port: 9092
+  targetPort: 9092
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false
+kafka_config: true

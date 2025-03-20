@@ -1,0 +1,29 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: postgres-deployment
+serviceName: ms-pg-sql
+appLabel: postgres
+appName: postgres
+
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: latest
+
+containerPort: 5432
+
+service:
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: true

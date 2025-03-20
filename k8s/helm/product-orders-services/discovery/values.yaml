@@ -1,0 +1,29 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: discovery-deployment
+serviceName: discovery
+appLabel: discovery-service
+appName: discovery-service
+
+replicaCount: 1
+
+image:
+  repository: robert111/discovery
+  tag: s1
+
+containerPort: 8761
+
+service:
+  type: ClusterIP
+  port: 8761
+  targetPort: 8761
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: true
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false

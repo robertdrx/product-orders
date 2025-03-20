@@ -1,0 +1,30 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: pgadmin-deployment
+serviceName: ms-pgadmin
+appLabel: pgadmin
+appName: pgadmin
+
+replicaCount: 1
+
+image:
+  repository: dpage/pgadmin4
+  tag: latest
+
+containerPort: 5050
+
+service:
+  type: LoadBalancer
+  port: 5050
+  targetPort: 80
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false
+pgadmin_config: true

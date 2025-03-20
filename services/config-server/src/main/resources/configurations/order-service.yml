@@ -1,17 +1,19 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ms_pg_sql:5432/order
+    url: jdbc:postgresql://ms-pg-sql:5432/order?createDatabaseIfNotExist=true
     username: alibou
     password: alibou
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      generate-ddl: true
+      ddl-auto: create
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     producer:
       bootstrap-servers: kafka:9092
+      #bootstrap-servers: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:

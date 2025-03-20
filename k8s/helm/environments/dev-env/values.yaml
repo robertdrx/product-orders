@@ -1,0 +1,13 @@
+global:
+  configMapName: robert-configmap
+  activeProfile: default
+  configServerURL: configserver:http://config-server-ms:8888/
+  eurekaServerURL: http://discovery:8761/eureka/
+  keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/micro-services/protocol/openid-connect/certs
+  kafkaBrokerURL: kafka:9092
+  mongodbUsername: alibou
+  mongodbPassword: alibou
+  SPRING_DATA_MONGODB_URI: "mongodb://alibou:alibou@mongodb-ms:27017/customer?authSource=admin"
+  POSTGRES_USER: alibou
+  POSTGRES_PASSWORD: alibou
+  PGDATA: /var/lib/postgresql/data

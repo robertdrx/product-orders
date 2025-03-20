@@ -1,12 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ms_pg_sql:5432/product
+    url: jdbc:postgresql://ms-pg-sql:5432/product?createDatabaseIfNotExist=true
     username: alibou
     password: alibou
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      generate-ddl: true
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     flyway:

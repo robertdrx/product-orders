@@ -1,0 +1,30 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: mail-dev-deployment
+serviceName: ms-mail-dev
+appLabel: mail-dev-service
+appName: mail-dev-service
+
+replicaCount: 1
+
+image:
+  repository: maildev/maildev
+  tag: latest
+
+containerPort: 1025
+
+service:
+  type: LoadBalancer
+  port: 1025
+  targetPort: 1025
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false
+mail_dev_enabled: true

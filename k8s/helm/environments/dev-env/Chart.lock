@@ -1,0 +1,45 @@
+dependencies:
+- name: product-orders-common
+  repository: file://../../product-orders-common
+  version: 0.1.0
+- name: config-server
+  repository: file://../../product-orders-services/config-server
+  version: 0.1.0
+- name: discovery
+  repository: file://../../product-orders-services/discovery
+  version: 0.1.0
+- name: gateway
+  repository: file://../../product-orders-services/gateway
+  version: 0.1.0
+- name: customer
+  repository: file://../../product-orders-services/customer
+  version: 0.1.0
+- name: product
+  repository: file://../../product-orders-services/product
+  version: 0.1.0
+- name: payment
+  repository: file://../../product-orders-services/payment
+  version: 0.1.0
+- name: notification
+  repository: file://../../product-orders-services/notification
+  version: 0.1.0
+- name: order
+  repository: file://../../product-orders-services/order
+  version: 0.1.0
+- name: mongodb
+  repository: file://../../product-orders-services/mongodb
+  version: 0.1.0
+- name: postgres
+  repository: file://../../product-orders-services/postgres
+  version: 0.1.0
+- name: pgadmin
+  repository: file://../../product-orders-services/pgadmin
+  version: 0.1.0
+- name: mail-dev
+  repository: file://../../product-orders-services/mail-dev
+  version: 0.1.0
+- name: kafka
+  repository: file://../../product-orders-services/kafka
+  version: 0.1.0
+digest: sha256:cd1c3b091885db0830b96017a8c08607624658218c7e593fcfa20f6f0b7d27ab
+generated: "2025-03-20T11:58:07.454859+02:00"

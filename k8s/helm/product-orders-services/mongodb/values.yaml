@@ -1,0 +1,29 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: mongodb-deployment
+serviceName: mongodb-ms
+appLabel: mongodb
+appName: mongodb
+
+replicaCount: 1
+
+image:
+  repository: mongo
+  tag: latest
+
+containerPort: 27017
+
+service:
+  type: ClusterIP
+  port: 27017
+  targetPort: 27017
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+eureka_enabled: false
+resouceserver_enabled: false
+kafka_enabled: false
+mongodb_enabled: true
+postgres_config: false

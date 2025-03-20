@@ -1,0 +1,29 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  #SPRING_PROFILES_ACTIVE: {{ .Values.global.activeProfile }}
+  SPRING_CONFIG_IMPORT: {{ .Values.global.configServerURL }}
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: {{ .Values.global.eurekaServerURL }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: {{ .Values.global.keyCloakURL }}
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: {{ .Values.global.kafkaBrokerURL }}
+  MONGO_INITDB_ROOT_USERNAME: {{ .Values.global.mongodbUsername }}
+  MONGO_INITDB_ROOT_PASSWORD: {{ .Values.global.mongodbPassword }}
+  SPRING_DATA_MONGODB_URI: {{ .Values.global.SPRING_DATA_MONGODB_URI }}
+  POSTGRES_USER: {{ .Values.global.POSTGRES_USER }}
+  POSTGRES_PASSWORD: {{ .Values.global.POSTGRES_PASSWORD }}
+  PGDATA: {{ .Values.global.PGDATA }}
+  PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.org
+  PGADMIN_DEFAULT_PASSWORD: admin
+  PGADMIN_CONFIG_SERVER_MODE: 'False'
+  KAFKA_CFG_NODE_ID: "0"
+  KAFKA_CFG_PROCESS_ROLES: controller,broker
+  KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+  KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+  KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+  KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+  KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  {{- end -}}

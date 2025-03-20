@@ -1,0 +1,74 @@
+apiVersion: v2
+name: dev-env
+description: A Helm chart for Kubernetes
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.0.0"
+dependencies:
+  - name: product-orders-common
+    repository: file://../../product-orders-common
+    version: 0.1.0
+  - name: config-server
+    repository: file://../../product-orders-services/config-server
+    version: 0.1.0
+  - name: discovery
+    repository: file://../../product-orders-services/discovery
+    version: 0.1.0
+  - name: gateway
+    repository: file://../../product-orders-services/gateway
+    version: 0.1.0
+  - name: customer
+    repository: file://../../product-orders-services/customer
+    version: 0.1.0
+  - name: product
+    repository: file://../../product-orders-services/product
+    version: 0.1.0
+  - name: payment
+    repository: file://../../product-orders-services/payment
+    version: 0.1.0
+  - name: notification
+    repository: file://../../product-orders-services/notification
+    version: 0.1.0
+  - name: order
+    repository: file://../../product-orders-services/order
+    version: 0.1.0
+  - name: mongodb
+    repository: file://../../product-orders-services/mongodb
+    version: 0.1.0
+  - name: postgres
+    repository: file://../../product-orders-services/postgres
+    version: 0.1.0
+  - name: pgadmin
+    repository: file://../../product-orders-services/pgadmin
+    version: 0.1.0
+  - name: mail-dev
+    repository: file://../../product-orders-services/mail-dev
+    version: 0.1.0
+  - name: kafka
+    repository: file://../../product-orders-services/kafka
+    version: 0.1.0
+#  - name: keycloak
+#    repository: file://../../product-orders-services/keycloak
+#    version: 0.1.0
+#  - name: kafka
+#    repository: file://../../product-orders-services/kafka
+#    version: 0.1.0
+

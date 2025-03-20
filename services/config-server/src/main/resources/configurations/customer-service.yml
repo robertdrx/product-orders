@@ -3,7 +3,7 @@ spring:
     mongodb:
       username: alibou
       password: alibou
-      host: ms_mongo_db
+      host: mongodb-ms
       port: 27017
       database: customer
       authentication-database: admin

@@ -1,0 +1,29 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: gateway-deployment
+serviceName: gateway
+appLabel: gateway-service
+appName: gateway-service
+
+replicaCount: 1
+
+image:
+  repository: robert111/gateway
+  tag: s1
+
+containerPort: 8222
+
+service:
+  type: LoadBalancer
+  port: 8222
+  targetPort: 8222
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: true
+kafka_enabled: false
+mongodb_enabled: false
+postgres_config: false
