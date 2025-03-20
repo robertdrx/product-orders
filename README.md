@@ -42,7 +42,7 @@ Install revision with all microservices: navigate to "\k8s\helm\environments\dev
 
 helm dependencies build
 
-Navigate to "\k8s\helm\environments". Run
+Navigate to "\k8s\helm\environments". Run:
 
 helm install product-orders dev-env --debug
 
@@ -57,6 +57,7 @@ Create customer:
 POST http://localhost:8222/api/v1/customers
 
 Raw json body:
+```json
 {
     "firstname": "John9",
     "lastname": "Doe9",
@@ -67,6 +68,7 @@ Raw json body:
         "zipCode": "500001"
     }
 }
+```
 
 Use customerId in next endpoint:
 
@@ -74,6 +76,7 @@ Create order:
 POST http://localhost:8222/api/v1/orders
 
 Raw json body:
+```json
 {
     "reference": "MS-1111124",
     "amount": 900,
@@ -94,6 +97,7 @@ Raw json body:
         }
     ]
 }
+```
 
 Check email server for notifications:
 
